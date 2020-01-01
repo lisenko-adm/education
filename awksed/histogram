@@ -1,0 +1,15 @@
+BEGIN { a = 0 }
+{ x [NR] = int($1 / 10) }
+END { while (a <= 10) {
+            c = 0
+            d = ""
+            for (i in x) {
+                if ( x [i] == a ) { c = c + 1; d = d "*" }
+                 }
+if ( a < 10 )  printf( " %2d - %2d: %3d %s\n",
+10*a, 10*a+9, c, d)
+else printf( "100:      %3d %s\n",
+c, d)
+a = a + 1
+}
+}

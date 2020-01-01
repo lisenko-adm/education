@@ -1,0 +1,19 @@
+BEGIN { a = 0 }
+{ x [NR] = int($1 / 10) }
+END { f = NR
+while (a <= 10) {
+            c = 0
+            d = ""
+            for (i in x) {
+                if ( x [i] == a ) { c = c + 1; }
+                 }
+p = int(c * 100 / f)
+while (p > 0) { d = d "*"
+ p = p - 1 }
+if ( a < 10 )  printf( " %2d - %2d: %5.1f%% %s\n",
+10*a, 10*a+9, c*100/f, d)
+else printf( "100:      %5.1f%% %s\n",
+c*100/f, d)
+a = a + 1
+}
+}
