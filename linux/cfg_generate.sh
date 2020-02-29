@@ -57,31 +57,12 @@ else
 fi
 echo  "file check passed"
 
-patternstart='-<-'
-patterend='->-'
-
 while read LINE
      do
-       #echo $LINE
        TEMPVAR=$(echo $LINE | sed -e 's/.*-<-//g' -e 's/->-//g')
        RESULTVAR="${!TEMPVAR}"
        RESULTLINE="$(echo $LINE | sed 's/-<-.*->-//g')$RESULTVAR"
        echo $RESULTLINE >> $resultfile
-     #sed -n "/-<-/,/->-/p" $LINE
-
-     #grep -o '-<-.*$->-' $LINE | sed 's/\(-<-\|->-\)//g' >> $stdout
-
-#sed 's/'"$var1"'/'"$var2"'/g'
-
-     #s/.*-\=<//;s/>\=-.*//
-
-     #'s/-\=</!!!/'
-
-
-     #awk '/-=<*>=-/{print $0}'
-
-     #echo "test $LINE" #>> $resultfile
-
 done < $templatefile
 }
 
