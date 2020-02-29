@@ -1,0 +1,8 @@
+```YAML
+---
+​
+script: cfg_generate.sh
+subroutine: cfg_generate
+begin_patr: -<-
+end_patr: ->-
+```
