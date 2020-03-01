@@ -1,6 +1,0 @@
-```YAML
----
-
-script: move_files.sh
-config: cfg_move_files.conf
-```
