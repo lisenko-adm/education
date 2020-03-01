@@ -6,7 +6,6 @@ while read LINE
       VARNAME=$(echo $LINE | sed -e 's/\=.*//g')
       VARVALUE=$(echo $LINE | sed -e 's/.*\=//g')
       export $VARNAME=$VARVALUE
-    fi
   done < cfg_move_files.conf
 
 if [ -d $SOURCEDIR ]
