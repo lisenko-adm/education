@@ -3,8 +3,6 @@
 #get env from config file
 while read LINE
   do
-    if ! [[ $LINE =~ [\`]{3}.* ]]
-    then
       VARNAME=$(echo $LINE | sed -e 's/\=.*//g')
       VARVALUE=$(echo $LINE | sed -e 's/.*\=//g')
       export $VARNAME=$VARVALUE
