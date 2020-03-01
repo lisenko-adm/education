@@ -59,10 +59,16 @@ echo  "file check passed"
 
 while read LINE
      do
-       TEMPVAR=$(echo $LINE | sed -e 's/.*-<-//g' -e 's/->-//g')
-       RESULTVAR="${!TEMPVAR}"
-       RESULTLINE="$(echo $LINE | sed 's/-<-.*->-//g')$RESULTVAR"
-       echo $RESULTLINE >> $resultfile
+REGEXP="-<-.*->-"
+      while [[ $LINE =~ $REGEXP ]]
+       do
+         FVAR=$(echo "${LINE}" | sed -n 's/\(.*\)\(-<-[a-zA-Z0-9_]*->-\)\(.*\)/\1/p' )
+         SVAR=$(echo "${LINE}" | sed -e 's/\(.*\)\(-<-[a-zA-Z0-9_]*->-\)\(.*\)/\2/1' -e 's/^.*-<-//1' -e 's/->-.*//1')
+         TVAR=$(echo "${LINE}" | sed -e 's/\(.*\)\(-<-[a-zA-Z0-9_]*->-\)\(.*\)/\3/1' )
+         RVAR="${!SVAR}"
+         LINE="$FVAR$RVAR$TVAR"
+      done
+       echo $LINE >> $resultfile
 done < $templatefile
 }
 
