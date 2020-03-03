@@ -1,24 +1,31 @@
 #!/bin/bash
-
+echo 0= $0
+SCRIPTDIR=$(dirname "$0")
+echo scriptdir= $SCRIPTDIR
+CONFIGFILE=$SCRIPTDIR/cfg_move_files.conf
+echo configfile= $CONFIGFILE
 #get env from config file
 while read LINE
   do
       VARNAME=$(echo $LINE | sed -e 's/\=.*//g')
       VARVALUE=$(echo $LINE | sed -e 's/.*\=//g')
       export $VARNAME=$VARVALUE
-  done < cfg_move_files.conf
+  done < $CONFIGFILE
+echo $SOURCEDIR
+echo $TARGETDIR
+echo $LOGFILENAME
 
 if [ -d $SOURCEDIR ]
   then
     echo $SOURCEDIR ok
   else
-    echo ERROR: $SOURCEDIR can not be used; exit
+    echo ERROR: $SOURCEDIR can not be used; exit 1
 fi
 if [ -d $TARGETDIR ]
   then
     echo $TARGETDIR ok
   else
-    echo ERROR: $TARGETDIR can not be used; exit
+    echo ERROR: $TARGETDIR can not be used; exit 1
 fi
 touch $LOGFILENAME
 if [ -w $LOGFILENAME ]
@@ -26,7 +33,7 @@ then
   echo "$LOGFILENAME is ok"
 else
   echo "ERROR: $LOGFILENAME can't be used"
-  exit
+  exit 1
 fi
 find $SOURCEDIR -maxdepth 1 -type f -not -name "*.locked" |
 while IFS= read FILENAME; do

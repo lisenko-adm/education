@@ -8,7 +8,7 @@ case "$1" in
 -t|--template) if [[ $2 =~ ^$|^-r$|^--result$ ]]
                then
                  echo "ERROR: template file needed"
-                 exit
+                 exit 1
                else
                  templatefile="$2"
                  echo "template file: $templatefile"
@@ -17,21 +17,21 @@ case "$1" in
 -r|--result)  if [[ $2 =~ ^$|^-t$|^--template$ ]]
                then
                  echo "ERROR: result key needed"
-                 exit
+                 exit 1
                else
                  resultfile="$2"
                  echo "result file: $resultfile"
                  shift
                fi ;;
 *) echo "ERROR: incorrect input, use -t/--template and -r/--result keys only"
-               exit
+               exit 1
 esac
 shift
 done
 
-[ -z $templatefile ] && echo "ERROR: missed -t key" && exit
+[ -z $templatefile ] && echo "ERROR: missed -t key" && exit 1
 
-[ -z $resultfile ] && echo "ERROR: missed -r key" && exit
+[ -z $resultfile ] && echo "ERROR: missed -r key" && exit 1
 
 echo "keys check passed"
 
@@ -41,19 +41,19 @@ then
   echo "$templatefile exist and readble"
 else
   echo "ERROR: $templatefile not exist or not readble"
-  exit
+  exit 1
 fi
 
 if [ -s $resultfile ]
 then
   echo "ERROR: $resultfile exist and not empty"
-  exit
+  exit 1
 elif touch $resultfile
 then
   echo "$resultfile is ok"
 else
   echo "ERROR: $resultfile can't be used"
-  exit
+  exit 1
 fi
 echo  "file check passed"
 
