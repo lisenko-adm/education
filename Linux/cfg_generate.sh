@@ -72,4 +72,10 @@ REGEXP="-<-.*->-"
 done < $templatefile
 }
 
-cfg_generate $@
+if [ "$(basename $0)" == "cfg_generate.sh" ]
+ then
+   echo run as script
+   cfg_generate "$@"
+ else
+   echo import
+fi
