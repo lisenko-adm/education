@@ -1,13 +1,17 @@
 #!/bin/bash
 function cfg_generate {
-
+  if [ $import=1 ]
+  then
+    templatefile="$1"
+    resultfile="$2"
+  else
 # get keys
 while [ -n "$1" ]
 do
 case "$1" in
 -t|--template) if [[ $2 =~ ^$|^-r$|^--result$ ]]
                then
-                 echo "ERROR: template file needed"
+                 echo "ERROR: template file needed"  >&2
                  exit 1
                else
                  templatefile="$2"
@@ -16,22 +20,22 @@ case "$1" in
                fi ;;
 -r|--result)  if [[ $2 =~ ^$|^-t$|^--template$ ]]
                then
-                 echo "ERROR: result key needed"
+                 echo "ERROR: result key needed"  >&2
                  exit 1
                else
                  resultfile="$2"
                  echo "result file: $resultfile"
                  shift
                fi ;;
-*) echo "ERROR: incorrect input, use -t/--template and -r/--result keys only"
+*) echo "ERROR: incorrect input, use -t/--template and -r/--result keys only"  >&2
                exit 1
 esac
 shift
 done
+fi
+[ -z $templatefile ] && echo "ERROR: missed -t key"  >&2 && exit 1
 
-[ -z $templatefile ] && echo "ERROR: missed -t key" && exit 1
-
-[ -z $resultfile ] && echo "ERROR: missed -r key" && exit 1
+[ -z $resultfile ] && echo "ERROR: missed -r key"  >&2 && exit 1
 
 echo "keys check passed"
 
@@ -40,19 +44,19 @@ if [ -r $templatefile ]
 then
   echo "$templatefile exist and readble"
 else
-  echo "ERROR: $templatefile not exist or not readble"
+  echo "ERROR: $templatefile not exist or not readble"  >&2
   exit 1
 fi
 
 if [ -s $resultfile ]
 then
-  echo "ERROR: $resultfile exist and not empty"
+  echo "ERROR: $resultfile exist and not empty"  >&2
   exit 1
 elif touch $resultfile
 then
   echo "$resultfile is ok"
 else
-  echo "ERROR: $resultfile can't be used"
+  echo "ERROR: $resultfile can't be used"  >&2
   exit 1
 fi
 echo  "file check passed"
@@ -78,4 +82,5 @@ if [ "$(basename $0)" == "cfg_generate.sh" ]
    cfg_generate "$@"
  else
    echo import
+   import=1
 fi
