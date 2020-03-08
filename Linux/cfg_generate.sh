@@ -1,15 +1,15 @@
 #!/bin/bash
 function cfg_generate {
-  if [ $import=1 ]
+  if [ $import -eq 1 ]
   then
     templatefile="$1"
     resultfile="$2"
   else
 # get keys
-while [ -n "$1" ]
-do
-case "$1" in
--t|--template) if [[ $2 =~ ^$|^-r$|^--result$ ]]
+    while [ -n "$1" ]
+    do
+    case "$1" in
+    -t|--template) if [[ $2 =~ ^$|^-r$|^--result$ ]]
                then
                  echo "ERROR: template file needed"  >&2
                  exit 1
@@ -18,7 +18,7 @@ case "$1" in
                  echo "template file: $templatefile"
                  shift
                fi ;;
--r|--result)  if [[ $2 =~ ^$|^-t$|^--template$ ]]
+     -r|--result)  if [[ $2 =~ ^$|^-t$|^--template$ ]]
                then
                  echo "ERROR: result key needed"  >&2
                  exit 1
@@ -27,12 +27,12 @@ case "$1" in
                  echo "result file: $resultfile"
                  shift
                fi ;;
-*) echo "ERROR: incorrect input, use -t/--template and -r/--result keys only"  >&2
+      *) echo "ERROR: incorrect input, use -t/--template and -r/--result keys only"  >&2
                exit 1
-esac
-shift
-done
-fi
+      esac
+      shift
+      done
+  fi
 [ -z $templatefile ] && echo "ERROR: missed -t key"  >&2 && exit 1
 
 [ -z $resultfile ] && echo "ERROR: missed -r key"  >&2 && exit 1
@@ -79,6 +79,7 @@ done < $templatefile
 if [ "$(basename $0)" == "cfg_generate.sh" ]
  then
    echo run as script
+   import=0
    cfg_generate "$@"
  else
    echo import
