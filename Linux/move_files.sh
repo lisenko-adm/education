@@ -41,7 +41,7 @@ while IFS= read FILENAME; do
   then
     if ! [ -e $FILENAME.locked ]
     then
-      touch $FILENAME.locked
+      touch $FILENAME.locked 2>&1
       FIRSTLINE=$(head -n 1 $FILENAME)
       LASTLINE=$(tail -n 1 $FILENAME)
       REGEXPUUID="^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
@@ -50,13 +50,13 @@ while IFS= read FILENAME; do
         NAMEOBJECT=$(echo $FIRSTLINE | awk '{print $1}')
         TIMEOBJECT=$(echo $FIRSTLINE | awk '{print $2 "-" $3}'  | sed 's/:/-/g')
         #дата получения файла=дата последнего изменения
-        FILEGETTIME=$(date -r $FILENAME +"%Y-%m-%d-%H-%M-%S")
+        FILEGETTIME=$(date -r $FILENAME +"%Y-%m-%d-%H-%M-%S" 2>&1 )
         NEWNAME=$NAMEOBJECT"_"$TIMEOBJECT"_"$FILEGETTIME
-        mv $FILENAME $TARGETDIR/$NEWNAME && echo MOVED $FILENAME from $SOURCEDIR to $TARGETDIR with name $NEWNAME >> $LOGFILENAME
-        rm $FILENAME.locked
+        mv $FILENAME $TARGETDIR/$NEWNAME 2>&1 && echo MOVED $FILENAME from $SOURCEDIR to $TARGETDIR with name $NEWNAME >> $LOGFILENAME
+        rm $FILENAME.locked 2>&1
       else
         #echo BAD UUID: $LASTLINE
-        rm $FILENAME.locked
+        rm $FILENAME.locked 2>&1
       fi
     else
       echo SKIPPED: File $FILENAME locked and can not be moved now
