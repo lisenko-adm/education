@@ -1,0 +1,17 @@
+---
+
+vsftpd_service: vsftpd
+vsftpd_anonymous_enable: true
+vsftpd_connect_from_port_20: true
+vsftpd_group: root
+vsftpd_listen: true
+vsftpd_listen_ipv6: false
+vsftpd_syslog_enable: true
+vsftpd_write_enable: true
+vsftpd_anon_root: /var/ftp/pub/
+vsftpd_anon_mkdir_write_enable: true
+vsftpd_anon_upload_enable: true
+vsftpd_pasv_enable: true
+vsftpd_pasv_min_port: 40900
+vsftpd_pasv_max_port: 40999
+vsftpd_allow_writeable_chroot: true

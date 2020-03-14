@@ -1,0 +1,42 @@
+---
+- name: This sets up an httpd webserver
+  hosts: node1
+  become: yes
+  tasks:
+  - name: Install apache packages
+    yum:
+      name: httpd
+      state: present
+  - name: ensure httpd is running
+    service:
+      name: httpd
+      state: started
+  - name: create index.html
+    file:
+      path: /var/www/html/index.html
+      state: touch
+      mode: '0755'
+      owner: 'ansible'
+      group: 'ansible'
+  - name: edit index.html
+      blockinfile:
+        path: /var/www/html/index.html
+        marker: " "
+        block: |
+          <html>
+          <head>
+          <title>Title</title>
+          </head>
+          <body>
+          Welcome to my web server
+          </body>
+          </html>
+  - name: Open port 80 for http access
+    firewalld:
+      service: http
+      permanent: true
+      state: enabled
+  - name: Restart the firewalld service to load in the firewall changes
+    service:
+      name: firewalld
+      state: restarted

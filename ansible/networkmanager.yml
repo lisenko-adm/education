@@ -1,0 +1,26 @@
+---
+- name: disable NetworkManager
+  hosts: node1
+  become: yes
+  gather_facts: false
+  tasks:
+  - name: Create a directory if it does not exist
+    file:
+      path: /var/backupgrub/
+      state: directory
+      mode: '0755'
+  - name: backup default grub2
+    copy:
+      src: /etc/default/grub
+      dest: /var/backupgrub/
+    delegate_to: node1
+  - name: edit grub
+    lineinfile:
+      path: /etc/default/grub
+      regexp: 'GRUB_CMDLINE_LINUX=""'
+      line: 'GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0 "'
+      owner: root
+      group: root
+      mode: '0644'
+  - name: grub2-mkconfig
+    shell: "grub2-mkconfig -o /boot/grub2/grub.cfg"

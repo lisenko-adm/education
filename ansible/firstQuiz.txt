@@ -1,0 +1,23 @@
+----task1
+1)
+became: yes
+2)
+---
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: Add user to remote hosts
+    user: name=ansible groups=sudo shell=/bin/bash password=****
+3)
+ ansible all -m command -a "hostname" -u ansible
+4)
+ansible all -m lineinfile -a "dest=/etc/motd regexp='' insertafter=EOF line='Hello from Ansible'" -b
+
+----task2
+1)
+ansible-docs -l
+2)3)
+Module user
+Module win_user
+Module group

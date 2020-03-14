@@ -1,0 +1,33 @@
+# Vsftpd configuration
+# Managed by Ansible, don't edit manually
+
+#
+# General settings
+#
+
+connect_from_port_20={{ 'YES' if vsftpd_connect_from_port_20 else 'NO' }}
+listen={{ 'YES' if vsftpd_listen else 'NO' }}
+listen_ipv6={{ 'YES' if vsftpd_listen_ipv6 else 'NO' }}
+pam_service_name={{ vsftpd_service }}
+syslog_enable={{ 'YES' if vsftpd_syslog_enable else 'NO' }}
+
+#
+# Access control for anonymous users
+#
+anonymous_enable={{ 'YES' if vsftpd_anonymous_enable else 'NO' }}
+{% if vsftpd_anon_root is defined %}
+anon_root={{ vsftpd_anon_root }}
+{% endif %}
+
+allow_writeable_chroot={{ 'YES' if vsftpd_allow_writeable_chroot else 'NO' }}
+write_enable={{ 'YES' if vsftpd_write_enable else 'NO' }}
+anon_mkdir_write_enable={{ 'YES' if vsftpd_anon_mkdir_write_enable else 'NO' }}
+anon_upload_enable={{ 'YES' if vsftpd_anon_upload_enable else 'NO' }}
+
+pasv_enable={{ 'YES' if vsftpd_pasv_enable else 'NO' }}
+{% if vsftpd_pasv_min_port is defined %}
+pasv_min_port={{ vsftpd_pasv_min_port }}
+{% endif %}
+{% if vsftpd_pasv_max_port is defined %}
+pasv_max_port={{ vsftpd_pasv_max_port }}
+{% endif %}

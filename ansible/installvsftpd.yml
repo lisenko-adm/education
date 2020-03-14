@@ -1,0 +1,57 @@
+---
+- name: Deploy vsftpd
+  become: yes
+  vars_files:
+    - fsftpdcfg.yml
+  hosts: node1 #name of the server going to host FTP service
+  tasks:
+  - name: Install FTP package
+    yum:
+      name: vsftpd
+      state: present
+  - name: install libsemanage-python
+    yum:
+      name: libsemanage-python
+      state: present
+  - name: Start FTP Service
+    service: name=vsftpd state=started enabled=yes
+  - name: Allow FTP service in Firewall
+    firewalld: port=20-21/tcp permanent=true state=enabled immediate=true
+  - name: Allow range port for ftp
+    firewalld: port=40900-40999/tcp permanent=true state=enabled immediate=true
+  - name: Create home dir for anonymous user if it does not exists
+    file:
+      path: /var/ftp/pub
+      state: directory
+      mode: '0755'
+      setype: public_content_rw_t
+  - name: create write folder
+    file:
+      path: /var/ftp/pub/workfolder
+      state: directory
+      mode: '0777'
+      setype: public_content_rw_t
+  - name: Set seboolean
+    seboolean:
+      name: ftpd_anon_write
+      state: yes
+      persistent: yes
+
+##
+  - name: Install configuration file
+    template:
+      src:   etc_vsftpd_vsftpd.conf.j2
+      dest: /etc/vsftpd/vsftpd.conf
+      mode: '0600'
+
+
+  - name: Ensure service is started
+    service:
+      name: vsftpd
+      state: started
+      enabled: true
+
+  - name: Restart ftp
+    service:
+      name: vsftpd
+      state: restarted

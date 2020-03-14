@@ -1,0 +1,17 @@
+---
+- name: "install mariadb"
+  hosts: all
+  gather_facts: false
+  become: yes
+  tasks:
+
+  - name: "check folder"
+    stat:
+      path: /tmp/database
+    register: check_folder
+
+  - name: "install mariadb"
+    yum:
+      name: mariadb-server
+      state: present
+      when: check_folder.stat.exists
